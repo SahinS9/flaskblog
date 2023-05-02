@@ -21,7 +21,7 @@ posts = [
         'date_posted' : 'april 22 , 2023'  
     }
 ]
-
+ 
 
 @app.route("/")
 @app.route("/home")
