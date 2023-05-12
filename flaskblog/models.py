@@ -1,11 +1,14 @@
 from datetime import datetime, timedelta 
 from flaskblog import db, login_manager
+from flask_login import UserMixin
 
+
+@login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(20), unique = True, nullable = False)
     email = db.Column(db.String(120), unique = True, nullable = False)
@@ -13,10 +16,10 @@ class User(db.Model):
     password = db.Column(db.String(60),nullable = False)
     posts = db.Relationship('Post', backref = 'author', lazy = True)   
     #backref will give us chance to get row of the author when we call author of any post post.user (user equal to some row in this case which we get as user = User.query.first()), #lazy means data will be taken from database
-
+    is_active = db.Column(db.Boolean,default = False)
 
     def __repr__(self):
-        return f"User('{self.username}','{self.email}','{self.image}')"
+        return f"User('{self.username}','{self.email}','{self.image}', '{self.is_active}')"
 
 
 class Post(db.Model):
